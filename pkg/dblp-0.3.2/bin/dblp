@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+#
+#  Created on 2008-5-28.
+#  Copyright (c) 2008. All rights reserved.
+
+begin
+  require 'rubygems'
+rescue LoadError
+  # no rubygems to load, so we fail silently
+end
+
+require 'dblp'
+require 'optparse'
+require 'ostruct'
+
+opt = OpenStruct.new
+opt.output = "dblp.bib"
+opt.bibtex = true
+
+if ARGV.size == 0
+  ARGV << "-h"
+end
+
+unless ARGV[0] == "-h"
+  file_to_parse = ARGV.shift
+end
+
+OptionParser.new do |opts|
+  
+  opts.banner = <<BANNER
+DBLP is a command line tool to fetch required bibtex entries 
+directly from the DBLP servers. The idea is, that you don't 
+have to maintain all entries in your own file, but youse well 
+known bibtex identifiers instead and then fetch them from DBLP.
+BANNER
+  
+  opts.separator("")
+  opts.separator("Specific Options:")
+  
+  opts.on("-o", "--output [FILENAME]", "Specify FILENAME for output instead of dblp.bib") do |fn|
+    opt.output = fn
+  end
+  
+  opts.on("-b", "--[no-]bibtex", "Run Bibtex after fetching bib entries") do |b|
+    opt.bibtex = b
+  end
+  
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+end.parse!
+
+
+Dblp::run(file_to_parse, opt)
+
+# do stuff
