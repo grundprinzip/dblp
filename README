@@ -1,27 +1,26 @@
-= dblp
+# dblp
 
-== DESCRIPTION:
+## DESCRIPTION:
 
 DBLP is a command line tool to fetch required bibtex entries directly from the DBLP servers. The idea is, that you don't have to maintain all entries in your own file, but youse well known bibtex identifiers instead and then fetch them from DBLP.
 
 
 
 
-== SYNOPSIS:
+## SYNOPSIS:
 
 The first step is to build your latex document, so that dblp can parse the aux file for your document. Now call
 
 	dblp my_tex_file[|.tex|.aux]
-	
+
 and this will scan for the citation commands in the aux file. The defined keys will be used to query DBLP. If an entry is available it is saved and as a result stored in the dblp.bib file. To use it in your Latex document just use \bibliography{my_own_file,..., dblp}
 
 For more command line options see
 
 	dblp --help
-	
 
 
-== LICENSE:
+## LICENSE:
 
 (The MIT License)
 
