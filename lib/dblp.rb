@@ -4,6 +4,7 @@ $:.unshift(File.dirname(__FILE__)) unless
 require File.dirname(__FILE__) + '/dblp/parser'
 require File.dirname(__FILE__) + '/dblp/grabber'
 
+
 module Dblp
   
   class << self

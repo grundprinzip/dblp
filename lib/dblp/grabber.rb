@@ -1,5 +1,7 @@
 require 'open-uri'
 
+
+
 module Dblp
   
   class Grabber
@@ -17,13 +19,23 @@ module Dblp
 
     def extract_pre(content)
       # extract the bibtex code, that is in pre tags
-      result = content.scan(/<pre>(.*?)<.pre>/mix)
-      if result
-        result.inject([]) do |m, k|
-          #m[k[0].match(/@.*\{(.*?),/)[1].gsub(/(<.*?>)/, "")] = k[0].gsub(/(<.*?>)/, "")
-          m << k[0].gsub(/(<.*?>)/, "")
-          m
+      pres = content.scan(/<pre>(.*?)<.pre>/mix)
+      
+      if pres
+
+        # First handle main entry
+        result = []
+        result << pres[0][0].gsub(/(<.*?>)/, "").gsub(/^\s+title\s+=\s+\{(.*?)\},/m, "  title     = {{\\1}},")
+
+        # Find the crossref
+        if pres.size > 1
+          booktitle = pres[1][0].match(/^\s+title\s+=\s+\{(.*?)\},/m)
+          if booktitle
+            result[0].gsub!(/^\s+booktitle\s+=\s+\{(.*?)\},/m, "  booktitle = {{#{booktitle[1]}}},")
+            result[0].gsub!(/^\s+crossref\s+=\s+\{(.*?)\},/m, "")
+          end
         end
+        result
       else
         []
       end
@@ -37,7 +49,8 @@ module Dblp
           content = read_html(DBLP_URL + key.gsub("DBLP:", ""))
           extract_pre(content)
         else
-          CiteseerGrabber.new.grab(key)
+          #CiteseerGrabber.new.grab(key)
+          []
         end
       rescue
         []
