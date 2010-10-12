@@ -114,6 +114,9 @@ class DBLPQuery
     end
   end
 
+  def cite(num)
+    "\\cite{#{select(num)}}"
+  end
 
 end
 
@@ -125,5 +128,6 @@ if __FILE__ == $0
   q.present
 
   puts q.select(3)
+  puts q.cite(3)
 
 end
