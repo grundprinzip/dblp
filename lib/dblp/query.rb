@@ -65,7 +65,7 @@ class DBLPQuery
       puts "Success"
       body = extreact_from_body(res.body)
       parse_table(body)
-      @results = parse_table(body)
+      @result = parse_table(body)
     else
       res.error!
     end
@@ -101,11 +101,29 @@ class DBLPQuery
     result
   end
 
+  # Based on the last result that was fetched, a new cite key is returned
+  # based on the position inside the result.
+  def select(num)
+    return if @result.size == 0 || @result.size < num
+    return @result[num.abs].cite
+  end
+
+  def present
+    @result.each_with_index do |item, i|
+      puts "\t#{i+1}\t#{item.title}\n"
+    end
+  end
+
+
 end
 
 if __FILE__ == $0
 
   q = DBLPQuery.new
-  p q.query("Kossmann")
+  q.query("Kossmann")
+
+  q.present
+
+  puts q.select(3)
 
 end
