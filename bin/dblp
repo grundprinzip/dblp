@@ -5,12 +5,7 @@ rescue LoadError
   # no rubygems to load, so we fail silently
 end
 
-begin
-  require 'dblp'
-rescue LoadError
-  require File.dirname(__FILE__) + '/../lib/dblp'
-end
-
+require 'dblp'
 require 'optparse'
 require 'ostruct'
 

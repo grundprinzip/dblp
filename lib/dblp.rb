@@ -1,9 +1,5 @@
-$:.unshift(File.dirname(__FILE__)) unless
-  $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
-
-require File.dirname(__FILE__) + '/dblp/parser'
-require File.dirname(__FILE__) + '/dblp/grabber'
-
+require 'dblp/parser'
+require 'dblp/grabber'
 
 module Dblp
   
