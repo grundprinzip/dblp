@@ -8,6 +8,10 @@ module Dblp
     
     # Const url to fetch from
     DBLP_URL = "http://dblp.uni-trier.de/rec/bibtex/"
+
+    def initialize(options = nil)
+      @options = options
+    end
     
     def read_html(url)
       content = ""
@@ -17,6 +21,11 @@ module Dblp
       content
     end
 
+    # Extracts all relevant information from the <pre> elements from
+    # the dblp page. There is one special case to handle. If there are
+    # multiple <pre> elements there is a cross reference used. We have
+    # to check if we include the cross reference or extract the short
+    # version.
     def extract_pre(content)
       # extract the bibtex code, that is in pre tags
       pres = content.scan(/<pre>(.*?)<.pre>/mix)
@@ -25,14 +34,29 @@ module Dblp
 
         # First handle main entry
         result = []
+        return [] if pres.size == 0
+
         result << pres[0][0].gsub(/(<.*?>)/, "").gsub(/^\s+title\s+=\s+\{(.*?)\},/m, "  title     = {{\\1}},")
 
-        # Find the crossref
+        # Find the crossref in the second <pre>
         if pres.size > 1
-          booktitle = pres[1][0].match(/^\s+title\s+=\s+\{(.*?)\},/m)
-          if booktitle
-            result[0].gsub!(/^\s+booktitle\s+=\s+\{(.*?)\},/m, "  booktitle = {{#{booktitle[1]}}},")
-            result[0].gsub!(/^\s+crossref\s+=\s+\{(.*?)\},/m, "")
+
+          if @options && @options.crossref
+            result << pres[1][0].gsub(/(<.*?>)/, "").gsub(/^\s+title\s+=\s+\{(.*?)\},/m, "  title     = {{\\1}},")
+          else
+            booktitle = pres[1][0].match(/^\s+title\s+=\s+\{(.*?)\},/m)
+
+            # If we find a booktitle, replace the book title with the
+            # one from the crossref
+            if booktitle
+              result[0].gsub!(/^\s+booktitle\s+=\s+\{(.*?)\},/m, "  booktitle = {{#{booktitle[1]}}},")
+
+              publisher = pres[1][0].match(/^\s+publisher\s+=\s+\{(.*?)\},/m)
+              publisher_data = publisher ? "  publisher = {{#{publisher[1]}}}," : ""
+
+              # TODO make cross ref handling configurable
+              result[0].gsub!(/^\s+crossref\s+=\s+\{(.*?)\},/m, publisher_data)
+            end
           end
         end
         result
@@ -52,7 +76,9 @@ module Dblp
           #CiteseerGrabber.new.grab(key)
           []
         end
-      rescue
+      rescue Exception => e
+        puts e.message
+        puts e.backtrace.inspect
         []
       end
     end

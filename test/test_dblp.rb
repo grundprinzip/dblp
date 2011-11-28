@@ -28,17 +28,29 @@ class TestDblp < Test::Unit::TestCase
     res = g.grab("DBLP:conf/btw/JacobsAss07")
     assert res.size == 0
   end
-  
-  
-  # def test_citeseer
+
+
+  def test_publisher
+    g = Dblp::Grabber.new
+    res = g.grab("DBLP:conf/btw/JacobsA07")
+    assert_match /publisher/, res[0]
+  end
+
+
+  def test_crossref_not_set
+    g = Dblp::Grabber.new
+    res = g.grab("DBLP:conf/btw/JacobsA07")
     
-  #   g = Dblp::CiteseerGrabber.new
-  #   res = g.grab("graefe91data")
-  #   assert res.size == 1
-    
-  #   res = g.grab("nixnurnix")
-  #   assert res.size == 0
-    
-  # end
-  
+    assert_equal 1, res.size
+    assert_match /publisher/, res[0]
+  end
+
+  def test_crossref_set
+    options = OpenStruct.new
+    options.crossref = true
+
+    g = Dblp::Grabber.new(options)
+    res = g.grab("DBLP:conf/btw/JacobsA07")
+    assert_equal 2, res.size
+  end
 end
