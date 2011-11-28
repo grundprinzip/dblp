@@ -9,6 +9,7 @@ HOMEPATH = "http://github.com/grundprinzip/dblp"
 DOWNLOAD_PATH = "http://rubyforge.org/projects/#{RUBYFORGE_PROJECT}"
 EXTRA_DEPENDENCIES = [
 #  ['activesupport', '>= 1.3.1']
+   ['json', '>= 1.4.0']
 ]    # An array of rubygem dependencies [name, version]
 
 @config_file = "~/.rubyforge/user-config.yml"
