@@ -41,6 +41,10 @@ BANNER
   opts.on("-c", "--[no-]crossref", "Generate full cross-references when fetching the data from DBLP") do |c|
     options.crossref = c
   end
+
+  opts.on("-s", "--[no-]short", "Make really compact version") do |c|
+    options.short = c
+  end
   
   opts.on("-b", "--[no-]bibtex", "Run Bibtex after fetching bib entries") do |b|
     options.bibtex = b

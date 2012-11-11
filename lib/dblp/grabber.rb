@@ -1,3 +1,4 @@
+
 require 'open-uri'
 
 
@@ -49,7 +50,9 @@ module Dblp
             # If we find a booktitle, replace the book title with the
             # one from the crossref
             if booktitle
-              result[0].gsub!(/^\s+booktitle\s+=\s+\{(.*?)\},/m, "  booktitle = {{#{booktitle[1]}}},")
+	      unless @options.short
+	        result[0].gsub!(/^\s+booktitle\s+=\s+\{(.*?)\},/m, "  booktitle = {{#{booktitle[1]}}},")
+	      end
 
               publisher = pres[1][0].match(/^\s+publisher\s+=\s+\{(.*?)\},/m)
               publisher_data = publisher ? "  publisher = {{#{publisher[1]}}}," : ""
