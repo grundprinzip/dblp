@@ -43,16 +43,20 @@ module Dblp
         if pres.size > 1
 
           if @options && @options.crossref
-            result << pres[1][0].gsub(/(<.*?>)/, "").gsub(/^\s+title\s+=\s+\{(.*?)\},/m, "  title     = {{\\1}},")
+            result << pres[1][0].gsub(/(<.*?>)/, "").gsub(/^\s+title\s+=\s+\{(.*?)\},$/m, "  title     = {{\\1}},")
           else
-            booktitle = pres[1][0].match(/^\s+title\s+=\s+\{(.*?)\},/m)
+            booktitle = pres[1][0].match(/^\s+title\s+=\s+\{(.*?)\},$/m)
+
 
             # If we find a booktitle, replace the book title with the
             # one from the crossref
             if booktitle
-	      unless @options.short
-	        result[0].gsub!(/^\s+booktitle\s+=\s+\{(.*?)\},/m, "  booktitle = {{#{booktitle[1]}}},")
-	      end
+              unless @options.short
+                cleantitle = booktitle[1].gsub(/\n|\t|\s+/, " ")
+                result[0].gsub!(/^\s+booktitle\s+=\s+\{(.*?)\},$/m){|match|
+                  "  booktitle = {{#{cleantitle}}},"
+                }
+              end
 
               publisher = pres[1][0].match(/^\s+publisher\s+=\s+\{(.*?)\},/m)
               publisher_data = publisher ? "  publisher = {{#{publisher[1]}}}," : ""

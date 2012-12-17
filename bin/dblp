@@ -13,6 +13,7 @@ options = OpenStruct.new
 options.output = "dblp.bib"
 options.bibtex = true
 options.crossref = false
+options.short = false
 
 if ARGV.size == 0
   ARGV << "-h"

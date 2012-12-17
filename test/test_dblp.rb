@@ -1,8 +1,14 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
+require 'ostruct'
 
 class TestDblp < Test::Unit::TestCase
 
   def setup
+    @options = OpenStruct.new
+    @options.output = "dblp.bib"
+    @options.bibtex = true
+    @options.crossref = false
+    @options.short = false
   end
   
   def test_parser
@@ -18,7 +24,7 @@ class TestDblp < Test::Unit::TestCase
   
   def test_grabber
     
-    g = Dblp::Grabber.new
+    g = Dblp::Grabber.new(@options)
     
     res = g.grab("DBLP:conf/btw/JacobsA07")
     assert res.size == 1
@@ -29,16 +35,23 @@ class TestDblp < Test::Unit::TestCase
     assert res.size == 0
   end
 
+  def test_grabber_special_chars
+    g = Dblp::Grabber.new(@options)
+    res = g.grab("DBLP:conf/icde/MinhasYAS08")
+    puts res
+    assert res.size == 1
+  end
+
 
   def test_publisher
-    g = Dblp::Grabber.new
+    g = Dblp::Grabber.new(@options)
     res = g.grab("DBLP:conf/btw/JacobsA07")
     assert_match /publisher/, res[0]
   end
 
 
   def test_crossref_not_set
-    g = Dblp::Grabber.new
+    g = Dblp::Grabber.new(@options)
     res = g.grab("DBLP:conf/btw/JacobsA07")
     
     assert_equal 1, res.size
@@ -46,10 +59,8 @@ class TestDblp < Test::Unit::TestCase
   end
 
   def test_crossref_set
-    options = OpenStruct.new
-    options.crossref = true
-
-    g = Dblp::Grabber.new(options)
+    @options.crossref = true
+    g = Dblp::Grabber.new(@options)
     res = g.grab("DBLP:conf/btw/JacobsA07")
     assert_equal 2, res.size
   end
