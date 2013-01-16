@@ -2,7 +2,7 @@
 
 ## DESCRIPTION:
 
-DBLP is a command line tool to fetch required bibtex entries directly from the DBLP servers. The idea is, that you don't have to maintain all entries in your own file, but youse well known bibtex identifiers instead and then fetch them from DBLP.
+DBLP is a command line tool to fetch required bibtex entries directly from the DBLP servers. The idea is, that you don't have to maintain all entries in your own file, but use well known bibtex identifiers instead and then fetch them from DBLP.
 
 
 
