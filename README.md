@@ -4,7 +4,11 @@
 
 DBLP is a command line tool to fetch required bibtex entries directly from the DBLP servers. The idea is, that you don't have to maintain all entries in your own file, but use well known bibtex identifiers instead and then fetch them from DBLP.
 
+## Installation
 
+To install the dblp gem run:
+
+	gem install dblp
 
 
 ## SYNOPSIS:
@@ -24,7 +28,7 @@ For more command line options see
 
 (The MIT License)
 
-Copyright (c) 2008 FIX
+Copyright (c) 2008-2013 Martin Grund
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
